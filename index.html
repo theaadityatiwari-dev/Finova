@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FINOVA Premium Smart Expense Tracker - High-end modern wealth console with real-time analytics, budgeting, and financial health assessment.">
+  <title>FINOVA // Smart Wealth Console</title>
+  
+  <!-- Google Fonts: Inter & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/components.css">
+  
+  <!-- Import Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Cinematic Splash Screen Loader -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="splash-content">
+      <div class="splash-logo">FINO<span>VA</span></div>
+      <div class="splash-loader">
+        <div class="splash-loader-progress"></div>
+      </div>
+      <div class="splash-tagline">QUANTIFYING LIQUID CAPITAL</div>
+    </div>
+  </div>
+
+  <!-- Ambient Dynamic Floating Particles -->
+  <div class="ambient-background">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+  </div>
+
+  <!-- Main App Shell Grid -->
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation Left -->
+    <aside class="app-sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">F</div>
+        <span>FINO<span>VA</span></span>
+      </div>
+
+      <!-- Nav Links -->
+      <nav class="sidebar-nav">
+        <div class="nav-item active" data-tab="dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item" data-tab="analytics">
+          <i data-lucide="line-chart"></i>
+          <span>Analytics</span>
+        </div>
+        <div class="nav-item" data-tab="transactions">
+          <i data-lucide="scroll-text"></i>
+          <span>Transactions</span>
+        </div>
+        <div class="nav-item" data-tab="insights">
+          <i data-lucide="lightbulb"></i>
+          <span>Insights</span>
+        </div>
+      </nav>
+
+      <!-- Sidebar Controls & User Profile -->
+      <div class="sidebar-footer">
+        <div class="selector-group">
+          <!-- Currency selection -->
+          <select class="sidebar-select" id="currencySelect" title="Select Currency">
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="JPY">JPY (¥)</option>
+          </select>
+          
+          <!-- Light/Dark Mode Switcher -->
+          <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Theme">
+            <i data-lucide="sun"></i>
+          </button>
+        </div>
+
+        <div class="user-profile">
+          <div class="user-avatar">JD</div>
+          <div class="user-info">
+            <span class="user-name">John Doe</span>
+            <span class="user-role">Premium Executive</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area Right -->
+    <main class="main-workspace">
+      
+      <!-- Sticky Header -->
+      <header class="workspace-header">
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <button class="mobile-menu-btn" id="mobileMenuBtn" title="Open Menu">
+            <i data-lucide="menu"></i>
+          </button>
+          
+          <!-- Contextual Search -->
+          <div class="search-box">
+            <i data-lucide="search"></i>
+            <input type="text" id="searchFilter" placeholder="Search ledger (e.g. rent)..." autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Right Side Widgets -->
+        <div class="header-meta">
+          <div class="clock-widget">
+            <span class="clock-dot"></span>
+            <span id="clockText">00:00:00</span>
+          </div>
+          <button class="btn btn-primary" id="btnNewTx">
+            <i data-lucide="plus"></i>
+            <span>Add Transaction</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW 1: SMART DASHBOARD -->
+      <section class="view-container active" id="dashboardView">
+        
+        <!-- Welcome banner -->
+        <div class="greeting-section">
+          <div class="greeting-text">
+            <h2>Welcome back, John</h2>
+            <p>Your asset console is updated. Here is your current financial standing.</p>
+          </div>
+          <div class="action-buttons">
+            <button class="btn btn-secondary" id="btnEditBudget">
+              <i data-lucide="sliders"></i>
+              <span>Configure Budget</span>
+            </button>
+            <button class="btn btn-secondary" id="btnExport">
+              <i data-lucide="download"></i>
+              <span>Export Ledger</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Core Financial Status Grid (Animated counters) -->
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1.5rem;">
+          <div class="glass-card stat-card emerald-glow">
+            <div class="stat-header">
+              <span class="stat-title">Net Liquidity</span>
+              <div class="stat-icon"><i data-lucide="wallet"></i></div>
+            </div>
+            <div class="stat-value" id="balanceVal">$0.00</div>
+            <div class="stat-footer" style="color:var(--color-emerald)">
+              <i data-lucide="trending-up"></i>
+              <span>Consolidated Balance</span>
+            </div>
+          </div>
+
+          <div class="glass-card stat-card emerald-glow">
+            <div class="stat-header">
+              <span class="stat-title">Inflows</span>
+              <div class="stat-icon"><i data-lucide="arrow-down-left"></i></div>
+            </div>
+            <div class="stat-value" id="incomeVal">$0.00</div>
+            <div class="stat-footer" style="color:var(--color-emerald)">
+              <span>Total Income This Month</span>
+            </div>
+          </div>
+
+          <div class="glass-card stat-card crimson-glow">
+            <div class="stat-header">
+              <span class="stat-title">Outflows</span>
+              <div class="stat-icon"><i data-lucide="arrow-up-right"></i></div>
+            </div>
+            <div class="stat-value" id="expenseVal">$0.00</div>
+            <div class="stat-footer" style="color:var(--color-crimson)">
+              <span>Total Spent This Month</span>
+            </div>
+          </div>
+
+          <div class="glass-card stat-card cyan-glow">
+            <div class="stat-header">
+              <span class="stat-title">Active Savings</span>
+              <div class="stat-icon"><i data-lucide="piggy-bank"></i></div>
+            </div>
+            <div class="stat-value" id="savingsVal">$0.00</div>
+            <div class="stat-footer" style="color:var(--color-cyan)">
+              <span>Retained Accumulations</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Split Details Layout -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; flex-wrap:wrap;">
+          
+          <!-- Left Column Widgets (Health Score + Budget list) -->
+          <div style="display:flex; flex-direction:column; gap:1.5rem;">
+            
+            <!-- Health Score Widget -->
+            <div class="glass-card">
+              <h3 style="font-size:var(--fs-base); margin-bottom:1.5rem; font-weight:600;">Financial Health Index</h3>
+              <div class="health-score-container">
+                <div class="health-dial">
+                  <svg viewBox="0 0 100 100">
+                    <!-- Define gradient for stroke -->
+                    <defs>
+                      <linearGradient id="health-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="var(--color-cyan)" />
+                        <stop offset="100%" stop-color="var(--color-emerald)" />
+                      </linearGradient>
+                    </defs>
+                    <circle class="bg-circle" cx="50" cy="50" r="40"></circle>
+                    <circle class="progress-circle" id="healthDialCircle" cx="50" cy="50" r="40"></circle>
+                  </svg>
+                  <div class="health-value" id="healthScoreVal">0</div>
+                </div>
+                <div class="health-details">
+                  <span class="health-label" id="healthDesc">Consolidating...</span>
+                  <span class="health-desc">Based on savings rate, budget compliance, and liquidity flow.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Budgets Progress Bars List -->
+            <div class="glass-card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                <h3 style="font-size:var(--fs-base); font-weight:600;">Category Budget Tracks</h3>
+                <span style="font-size:var(--fs-xs); color:var(--text-muted); font-weight:600;">ACTIVE TARGETS</span>
+              </div>
+              <div class="budget-progress-list" id="budgetProgressList">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column Widgets (Recent Activity logs) -->
+          <div class="glass-card" style="display:flex; flex-direction:column;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+              <h3 style="font-size:var(--fs-base); font-weight:600;">Recent Account Ledger</h3>
+              <span class="nav-item" data-tab="transactions" style="font-size:var(--fs-xs); color:var(--color-cyan); font-weight:600; padding:0; border:none; cursor:pointer;">
+                VIEW ENTIRE LEDGER →
+              </span>
+            </div>
+            <div class="transaction-list-compact" id="recentTxList" style="flex-grow:1; display:flex; flex-direction:column; gap:0.75rem;">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- VIEW 2: MONTHLY ANALYTICS -->
+      <section class="view-container" id="analyticsView">
+        <div class="greeting-section">
+          <div class="greeting-text">
+            <h2>Analytical Insights Hub</h2>
+            <p>Deconstruct your income streams, outflows, and savings projections via interactive modules.</p>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr; gap:1.5rem;">
+          <!-- Flow Trend Chart Line -->
+          <div class="glass-card" style="height:380px;">
+            <h3 style="font-size:var(--fs-base); margin-bottom:1rem; font-weight:600;">Cash Inflow vs Outflow Velocity</h3>
+            <div style="position:relative; height:calc(100% - 2rem); width:100%;">
+              <canvas id="flowChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Bottom Splits (Pie and budget limits comparison) -->
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; flex-wrap:wrap;">
+            
+            <div class="glass-card" style="height:340px;">
+              <h3 style="font-size:var(--fs-base); margin-bottom:1rem; font-weight:600;">Expense Allocation Distribution</h3>
+              <div style="position:relative; height:calc(100% - 2rem); width:100%;">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+
+            <div class="glass-card" style="height:340px;">
+              <h3 style="font-size:var(--fs-base); margin-bottom:1rem; font-weight:600;">Category Spend vs Limit Benchmarks</h3>
+              <div style="position:relative; height:calc(100% - 2rem); width:100%;">
+                <canvas id="budgetChart"></canvas>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: TRANSACTION HISTORY -->
+      <section class="view-container" id="transactionsView">
+        <div class="greeting-section">
+          <div class="greeting-text">
+            <h2>Consolidated Account Ledger</h2>
+            <p>Comprehensive transaction vault. Search, sort, and isolate specific financial details.</p>
+          </div>
+        </div>
+
+        <!-- Filter and Toolbar panel -->
+        <div class="glass-card" style="padding:1.25rem; display:flex; gap:1rem; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+          <div style="display:flex; gap:0.75rem; flex-wrap:wrap; flex-grow:1;">
+            
+            <!-- Type filter -->
+            <div style="display:flex; flex-direction:column; gap:0.25rem;">
+              <label for="typeFilter" style="font-size:var(--fs-xs); color:var(--text-muted); font-weight:600;">TYPE</label>
+              <select id="typeFilter" class="sidebar-select" style="min-width:120px;">
+                <option value="All">All Types</option>
+                <option value="income">Inflow (Income)</option>
+                <option value="expense">Outflow (Expense)</option>
+              </select>
+            </div>
+
+            <!-- Category filter -->
+            <div style="display:flex; flex-direction:column; gap:0.25rem;">
+              <label for="categoryFilter" style="font-size:var(--fs-xs); color:var(--text-muted); font-weight:600;">CATEGORY</label>
+              <select id="categoryFilter" class="sidebar-select" style="min-width:140px;">
+                <option value="All">All Categories</option>
+                <option value="Salary">Salary</option>
+                <option value="Freelance">Freelance</option>
+                <option value="Investment">Investment</option>
+                <option value="Housing">Housing</option>
+                <option value="Food">Food</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Transport">Transport</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Health">Health</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- Sorting selector -->
+            <div style="display:flex; flex-direction:column; gap:0.25rem;">
+              <label for="sortSelect" style="font-size:var(--fs-xs); color:var(--text-muted); font-weight:600;">ORDER BY</label>
+              <select id="sortSelect" class="sidebar-select" style="min-width:160px;">
+                <option value="date-desc">Date (Newest First)</option>
+                <option value="date-asc">Date (Oldest First)</option>
+                <option value="amount-desc">Amount (Highest First)</option>
+                <option value="amount-asc">Amount (Lowest First)</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Ledger Table view -->
+        <div class="glass-card" style="padding:0; overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; text-align:left;" id="ledgerTable">
+            <thead>
+              <tr style="border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.01)">
+                <th style="padding:1.25rem 1.5rem; font-size:var(--fs-xs); text-transform:uppercase; color:var(--text-muted); font-weight:600;">Description</th>
+                <th style="padding:1.25rem 1.5rem; font-size:var(--fs-xs); text-transform:uppercase; color:var(--text-muted); font-weight:600;">Type</th>
+                <th style="padding:1.25rem 1.5rem; font-size:var(--fs-xs); text-transform:uppercase; color:var(--text-muted); font-weight:600;">Category</th>
+                <th style="padding:1.25rem 1.5rem; font-size:var(--fs-xs); text-transform:uppercase; color:var(--text-muted); font-weight:600;">Date</th>
+                <th style="padding:1.25rem 1.5rem; font-size:var(--fs-xs); text-transform:uppercase; color:var(--text-muted); font-weight:600;">Amount</th>
+                <th style="padding:1.25rem 1.5rem; font-size:var(--fs-xs); text-transform:uppercase; color:var(--text-muted); font-weight:600;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="fullTxList" style="font-size:var(--fs-sm);">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- VIEW 4: INTELLIGENT INSIGHTS -->
+      <section class="view-container" id="insightsView">
+        <div class="greeting-section">
+          <div class="greeting-text">
+            <h2>Financial Intelligence Console</h2>
+            <p>Actionable summaries and algorithmic projections calculated from your transactional habits.</p>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:1.5rem;" id="insightsList">
+          <!-- Rendered dynamically -->
+        </div>
+      </section>
+      
+    </main>
+  </div>
+
+  <!-- Mobile Floating Action Button (FAB) -->
+  <div class="fab-trigger" id="fabNewTx" title="New Transaction">
+    <i data-lucide="plus"></i>
+  </div>
+
+  <!-- MODAL: ADD / EDIT TRANSACTION -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">New Ledger Transaction</h3>
+        <i data-lucide="x" class="modal-close" id="modalClose"></i>
+      </div>
+      <div class="modal-body">
+        <form id="txForm">
+          <input type="hidden" id="txId">
+          
+          <div class="form-group">
+            <label for="txDescription">Description</label>
+            <input type="text" id="txDescription" class="form-control" placeholder="e.g. Stripe Consulting fee" required autocomplete="off">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="txAmount">Amount</label>
+              <input type="number" id="txAmount" class="form-control" placeholder="e.g. 1500" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="txType">Flow Type</label>
+              <select id="txType" class="form-control">
+                <option value="expense">Outflow (Expense)</option>
+                <option value="income">Inflow (Income)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="txCategory">Category</label>
+              <select id="txCategory" class="form-control">
+                <!-- Loaded dynamically by type selection -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="txDate">Transaction Date</label>
+              <input type="date" id="txDate" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="txNotes">Notes & Annotations</label>
+            <textarea id="txNotes" class="form-control" placeholder="Additional details..." rows="3" style="resize:none;"></textarea>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="window.FinovaUI.closeTransactionModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Ledger</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIGURE BUDGETS -->
+  <div class="modal-overlay" id="budgetModalOverlay">
+    <div class="modal-content" style="width: 550px;">
+      <div class="modal-header">
+        <h3>Configure Capital Budgets</h3>
+        <i data-lucide="x" class="modal-close" id="budgetModalClose"></i>
+      </div>
+      <div class="modal-body">
+        <form id="budgetForm">
+          
+          <div class="form-group">
+            <label for="bOverall">Consolidated Monthly Budget Limit</label>
+            <input type="number" id="bOverall" class="form-control" placeholder="Overall cap" required>
+          </div>
+          
+          <div style="border-top:1px solid var(--border-color); margin:1.5rem 0; padding-top:1rem;">
+            <label style="font-size:var(--fs-xs); font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:1rem;">Category Limits</label>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+              <div class="form-group">
+                <label for="bHousing">Housing</label>
+                <input type="number" id="bHousing" class="form-control" placeholder="Housing Limit">
+              </div>
+              <div class="form-group">
+                <label for="bFood">Food</label>
+                <input type="number" id="bFood" class="form-control" placeholder="Food Limit">
+              </div>
+              <div class="form-group">
+                <label for="bEntertainment">Entertainment</label>
+                <input type="number" id="bEntertainment" class="form-control" placeholder="Entertainment Limit">
+              </div>
+              <div class="form-group">
+                <label for="bTransport">Transport</label>
+                <input type="number" id="bTransport" class="form-control" placeholder="Transport Limit">
+              </div>
+              <div class="form-group">
+                <label for="bUtilities">Utilities</label>
+                <input type="number" id="bUtilities" class="form-control" placeholder="Utilities Limit">
+              </div>
+              <div class="form-group">
+                <label for="bHealth">Health</label>
+                <input type="number" id="bHealth" class="form-control" placeholder="Health Limit">
+              </div>
+              <div class="form-group">
+                <label for="bShopping">Shopping</label>
+                <input type="number" id="bShopping" class="form-control" placeholder="Shopping Limit">
+              </div>
+              <div class="form-group">
+                <label for="bOther">Other</label>
+                <input type="number" id="bOther" class="form-control" placeholder="Other Limit">
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="window.FinovaUI.closeBudgetModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Stack -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Lucide Script Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- App JS Files -->
+  <script src="js/db.js"></script>
+  <script src="js/insights.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
